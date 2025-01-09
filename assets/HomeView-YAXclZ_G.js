@@ -1,0 +1,1 @@
+import{_ as s,c as a,b as n,a as o}from"./index-ThgDmDtc.js";const r={};function t(c,e){return o(),a("main",null,e[0]||(e[0]=[n("div",{class:"bg-blue-500"},"123",-1)]))}const _=s(r,[["render",t]]);export{_ as default};
