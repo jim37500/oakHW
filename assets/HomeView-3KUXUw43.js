@@ -1,0 +1,1 @@
+import{d as s,c as t,a as n,u as r,e as a,b as u}from"./index-B8HnlLfJ.js";const m=s({__name:"HomeView",setup(c){const o=a();return(l,e)=>(u(),t("main",null,[n("div",{class:"bg-blue-500 cursor-pointer",onClick:e[0]||(e[0]=i=>r(o).push("login"))},"test")]))}});export{m as default};
