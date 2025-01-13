@@ -1,5 +1,14 @@
 @import './base.css';
 
+.p-paginator-page-selected {
+  background-color: black !important;
+  color: white !important;
+}
+
+.swal2-container {
+  z-index: 99999999;
+}
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;

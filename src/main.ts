@@ -1,26 +1,42 @@
 import './assets/main.css';
 import 'leaflet/dist/leaflet.css';
+import 'primeicons/primeicons.css';
 
+import { createPinia } from 'pinia';
 import { createApp } from 'vue';
 import PrimeVue from 'primevue/config';
 import Aura from '@primevue/themes/aura';
 import { definePreset } from '@primevue/themes';
-
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+import { faUser } from '@fortawesome/free-regular-svg-icons';
+import Swal from 'sweetalert2';
 
 import App from './App.vue';
 import router from './router';
-import { LMap, LGeoJson, LTileLayer, LPolyline, LPolygon, LMarker, LPopup, LIcon } from '@vue-leaflet/vue-leaflet';
+import { LMap, LTileLayer, LPolygon, LMarker, LPopup, LIcon, LTooltip } from '@vue-leaflet/vue-leaflet';
 
-import Button from "primevue/button"
+import Button from 'primevue/button';
+import Dialog from 'primevue/dialog';
+import InputGroup from 'primevue/inputgroup';
+import InputText from 'primevue/inputtext';
+import Tooltip from 'primevue/tooltip';
+import Paginator from 'primevue/paginator';
+
+
+library.add(faUser);
 
 declare global {
   interface Window {
     router: typeof router;
+    Swal: typeof Swal;
   }
 }
 
 window.router = router;
+window.Swal = Swal;
 
+const pinia = createPinia();
 const app = createApp(App);
 
 const MyPreset = definePreset(Aura, {
@@ -41,6 +57,7 @@ const MyPreset = definePreset(Aura, {
   },
 });
 
+app.use(pinia);
 app.use(router);
 app.use(PrimeVue, {
   theme: {
@@ -49,14 +66,20 @@ app.use(PrimeVue, {
   },
 });
 
+app.directive('tooltip', Tooltip);
+
 app.component('LMap', LMap);
 app.component('LTileLayer', LTileLayer);
-app.component('LGeoJson', LGeoJson);
-app.component('LPolyline', LPolyline);
 app.component('LPolygon', LPolygon);
 app.component('LMarker', LMarker);
+app.component('LTooltip', LTooltip);
 app.component('LPopup', LPopup);
 app.component('LIcon', LIcon);
+app.component('FontAwesomeIcon', FontAwesomeIcon);
 app.component('PrimeButton', Button);
+app.component('PrimeDialog', Dialog);
+app.component('PrimeInputGroup', InputGroup);
+app.component('PrimeInputText', InputText);
+app.component('PrimePaginator', Paginator);
 
 app.mount('#app');

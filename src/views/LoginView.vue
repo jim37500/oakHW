@@ -1,28 +1,61 @@
 <template>
-  <div class="min-h-screen flex items-center justify-center bg-gray-100">
-    <div class="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
-      <h2 class="text-2xl font-bold text-center">歡迎使用</h2>
-      <h2 class="text-2xl font-bold mb-6 text-center">新北市都市更新Demo</h2>
-      <div ref="GoogleButton" class="flex justify-center mb-4"></div>
-      <button @click="HandleFacebookLogin" class="w-full bg-blue-600 font-semibold text-white py-2 rounded-lg hover:bg-blue-700 transition duration-300 flex items-center justify-center">
-        <svg class="w-6 h-6 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-          <path
-            fill="#FFFFFF"
-            d="M22.675 0h-21.35C.6 0 0 .6 0 1.325v21.351C0 23.4.6 24 1.325 24H12.82v-9.294H9.692v-3.622h3.128V8.413c0-3.1 1.893-4.788 4.659-4.788 1.325 0 2.463.099 2.794.143v3.24l-1.918.001c-1.504 0-1.794.715-1.794 1.763v2.31h3.587l-.467 3.622h-3.12V24h6.116C23.4 24 24 23.4 24 22.675V1.325C24 .6 23.4 0 22.675 0z"
-          />
-        </svg>
-        綁定Facebook
-      </button>
+  <TopBar />
+  <div class="pt-24 mx-auto w-10/12">
+    <div class="w-full flex flex-col items-center justify-center mb-8">
+      <div class="text-4xl font-semibold">歡迎使用</div>
+      <div class="text-4xl font-semibold">新北市都市更新Demo</div>
+    </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-8">
+      <div class="w-full">
+        <img class="" src="/hero.png" alt="Your Company" />
+      </div>
+      <div class="w-full bg-zinc-50 border-2 border-zinc-100 px-8 py-8 rounded-2xl">
+        <div class="text-2xl font-semibold mb-2">使用說明</div>
+        <div class="mb-4">
+          <div class="text-xl font-semibold mb-1">
+            1. 登入Google
+            <span v-if="User.GoogleName" class="text-green-600"><i class="pi pi-check-circle"></i></span>
+          </div>
+          <div v-if="!User.GoogleName" ref="GoogleButton" class=""></div>
+        </div>
+
+        <div class="mb-4">
+          <div class="text-xl font-semibold mb-1">
+            2. 綁定Facebook
+            <span v-if="User.FBName" class="text-green-600"><i class="pi pi-check-circle"></i></span>
+          </div>
+          <div v-if="!User.FBName" class="flex justify-center w-full">
+            <button @click="LoginFacebook" class="w-full bg-blue-600 font-semibold text-white py-2 rounded-lg hover:bg-blue-700 transition duration-300 flex items-center justify-center">
+              <svg class="w-6 h-6 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                <path
+                  fill="#FFFFFF"
+                  d="M22.675 0h-21.35C.6 0 0 .6 0 1.325v21.351C0 23.4.6 24 1.325 24H12.82v-9.294H9.692v-3.622h3.128V8.413c0-3.1 1.893-4.788 4.659-4.788 1.325 0 2.463.099 2.794.143v3.24l-1.918.001c-1.504 0-1.794.715-1.794 1.763v2.31h3.587l-.467 3.622h-3.12V24h6.116C23.4 24 24 23.4 24 22.675V1.325C24 .6 23.4 0 22.675 0z"
+                />
+              </svg>
+              綁定Facebook
+            </button>
+          </div>
+        </div>
+
+        <div class="text-xl font-semibold mb-1">3. 開始使用</div>
+        <PrimeButton class="w-full" label="開始使用" severity="contrast" :outlined="!CanLogin" @click="StartToUse" />
+      </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref } from 'vue';
-import UserService from '@/services/UserService';
+import { onMounted, ref, watchEffect } from 'vue';
+import { storeToRefs } from 'pinia';
+import { userStore } from '../stores/UserStore';
+import UtilityService from '@/services/UtilityService';
+import TopBar from '../components/TopBar.vue';
 
-const User = ref(UserService.User);
+const store = userStore();
+const { User } = storeToRefs(store);
 const GoogleButton = ref(null);
+const CanLogin = ref(false);
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const handleCredentialResponse = (response: any) => {
@@ -30,9 +63,6 @@ const handleCredentialResponse = (response: any) => {
   User.value.GoogleName = decodedToken.name;
   User.value.GoogleEmail = decodedToken.email;
   User.value.GooglePicture = decodedToken.picture;
-
-  console.log('JWT Token:', response.credential);
-  console.log('Decoded Token:', decodedToken);
 };
 
 const parseJwt = (token: string) => {
@@ -53,7 +83,7 @@ declare const google: any;
 declare const FB: any;
 
 const initializeGoogleLogin = () => {
-  const clientId = UserService.GoogleClientID;
+  const clientId = store.GoogleClientID;
   google.accounts.id.initialize({
     client_id: clientId,
     callback: handleCredentialResponse,
@@ -61,7 +91,7 @@ const initializeGoogleLogin = () => {
   google.accounts.id.renderButton(GoogleButton.value, { theme: 'outline', size: 'large' });
 };
 
-const HandleFacebookLogin = () => {
+const LoginFacebook = () => {
   FB.login(
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (response: any) => {
@@ -82,6 +112,22 @@ const HandleFacebookLogin = () => {
   );
 };
 
+const StartToUse = () => {
+  if (!User.value.GoogleName) {
+    return UtilityService.Alert('請先登入Google帳號', 'error');
+  }
+
+  if (!User.value.FBName) {
+    return UtilityService.Alert('請先綁定Facebook帳號', 'error');
+  }
+
+  window.router.push('/');
+};
+
+watchEffect(() => {
+  CanLogin.value = Boolean(User.value.GoogleName && User.value.FBName);
+});
+
 declare global {
   interface Window {
     fbAsyncInit: () => void;
@@ -100,7 +146,7 @@ onMounted(() => {
   // Load Facebook SDK
   window.fbAsyncInit = function () {
     FB.init({
-      appId: UserService.FaceBookAppID, // Replace with your Facebook App ID
+      appId: store.FaceBookAppID, // Replace with your Facebook App ID
       cookie: true,
       xfbml: true,
       version: 'v12.0',

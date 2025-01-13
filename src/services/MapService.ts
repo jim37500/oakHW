@@ -1,7 +1,8 @@
 import axios from 'axios';
 
 export default class MapService {
-  static async GetUrbanAreas() {
+
+  static async GetUrbanUpdatePolygon() {
     const o = await axios.get('https://enterprise.oakmega.ai/api/v1/server/xinbei/geolocation-json?directory=tucheng.json');
     return o.data;
   }
