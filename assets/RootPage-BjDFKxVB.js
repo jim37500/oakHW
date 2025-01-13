@@ -1,0 +1,1 @@
+import{_ as t}from"./TopBar.vue_vue_type_script_setup_true_lang-BB2QcDiE.js";import{d as a,c as s,a as e,b as n,F as r,h as c,i as _}from"./index-CliSsjwS.js";const m={class:"pt-24 mx-auto w-10/12"},f=a({__name:"RootPage",setup(p){return(i,l)=>{const o=c("RouterView");return _(),s(r,null,[e(t),n("div",m,[e(o)])],64)}}});export{f as default};
