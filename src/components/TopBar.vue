@@ -1,7 +1,7 @@
 <template>
   <div class="min-h-full">
     <nav class="bg-gray-800 w-full fixed z-10 py-1">
-      <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div class="px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between items-center">
           <div class="flex items-center">
             <div class="flex-shrink-0 cursor-pointer m-2">
@@ -9,7 +9,7 @@
             </div>
             <div class="px-3 py-2 font-medium text-2xl sm:text-3xl cursor-pointer text-yellow-500">新北市都市更新Demo</div>
           </div>
-          <div @click="ClickUserIcon" class="flex items-center cursor-pointer">
+          <div id="v-step-2" @click="ClickUserIcon" class="flex items-center cursor-pointer">
             <div v-if="User.FBPicture">
               <img class="size-12 rounded-full" :src="User.FBPicture" alt="Your Profile" />
             </div>

@@ -4,4 +4,5 @@ export type Stop = {
   Longitude: number;
   Distance: number;
   IsFocus?: boolean;
+  IsEmpty?: boolean;
 };

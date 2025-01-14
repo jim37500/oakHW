@@ -1,6 +1,6 @@
 <template>
   <TopBar />
-  <div class="pt-24 mx-auto w-10/12">
+  <div class="pt-24 mx-auto w-11/12">
     <div class="w-full flex flex-col items-center justify-center mb-8">
       <div class="text-4xl font-semibold">歡迎使用</div>
       <div class="text-4xl font-semibold">新北市都市更新Demo</div>
@@ -17,7 +17,7 @@
             1. 登入Google
             <span v-if="User.GoogleName" class="text-green-600"><i class="pi pi-check-circle"></i></span>
           </div>
-          <div v-if="!User.GoogleName" ref="GoogleButton" class=""></div>
+          <div v-if="!User.GoogleName" ref="GoogleButton"></div>
         </div>
 
         <div class="mb-4">
@@ -101,11 +101,7 @@ const LoginFacebook = () => {
           User.value.FBName = userInfo.name;
           User.value.FBEmail = userInfo.email;
           User.value.FBPicture = userInfo.picture.data.url;
-          console.log('User Info:', userInfo);
-          console.log(User.value);
         });
-      } else {
-        console.log('User cancelled login or did not fully authorize.');
       }
     },
     { scope: 'public_profile,email' },
@@ -146,7 +142,7 @@ onMounted(() => {
   // Load Facebook SDK
   window.fbAsyncInit = function () {
     FB.init({
-      appId: store.FaceBookAppID, // Replace with your Facebook App ID
+      appId: store.FaceBookAppID,
       cookie: true,
       xfbml: true,
       version: 'v12.0',

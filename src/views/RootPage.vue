@@ -1,6 +1,6 @@
 <template>
   <TopBar />
-  <div class="pt-24 mx-auto w-10/12">
+  <div class="pt-24 mx-auto w-11/12">
     <RouterView />
   </div>
 </template>
