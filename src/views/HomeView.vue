@@ -97,6 +97,7 @@
         :key="PaginatorKey"
         :totalRecords="FilteredStops.length"
         :rows="StopsPerPage"
+        :pageLinkSize="PaginatorPageLinkSize"
         :pt="{ root: { class: '!bg-zinc-50' }, current: { class: '!text-blue-500' } }"
         @page="ChangeDisplayStops"
       />
@@ -160,6 +161,7 @@ const DisplayStops = ref<Stop[]>([]); // 顯示在清單上的站點
 const FilteredStops = ref<Stop[]>([]); // 搜尋過後的站點
 const FocusStop = ref({} as Stop);
 const PaginatorKey = ref(0);
+const PaginatorPageLinkSize = ref(5);
 const IsHighlightDialogOpen = ref(false);
 
 const TourOptions = ref({
@@ -274,6 +276,11 @@ const getSurroundingStops = async (lng: number, lat: number) => {
 
 const LoadData = () => {
   IsLoading.value = true;
+  // 若 為手機版 則將分頁連結數量設為3
+  if (window.innerWidth < 600) {
+    PaginatorPageLinkSize.value = 3;
+  }
+
   MapService.GetUrbanUpdatePolygon()
     .then((o) => {
       o.result.features.forEach((area: { geometry: { coordinates: [number, number][][] } }) => {
