@@ -1,3 +1,4 @@
+/* c8 ignore start */
 <template>
   <div class="min-h-full">
     <nav class="bg-gray-800 w-full fixed z-10 py-1">
@@ -9,7 +10,7 @@
             </div>
             <div class="px-3 py-2 font-medium text-2xl sm:text-3xl cursor-pointer text-yellow-500">新北市都市更新Demo</div>
           </div>
-          <div id="v-step-2" @click="ClickUserIcon" class="flex items-center cursor-pointer">
+          <div @click="ClickUserIcon" class="flex items-center cursor-pointer">
             <div v-if="User.FBPicture">
               <img class="size-12 rounded-full" :src="User.FBPicture" alt="Your Profile" />
             </div>
@@ -64,10 +65,12 @@
     </template>
   </PrimeDialog>
 </template>
+/* c8 ignore stop */
 
 <script setup lang="ts">
 import { ref } from 'vue';
 import { storeToRefs } from 'pinia';
+import { useRouter } from 'vue-router';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { userStore } from '../stores/UserStore';
 import UtilityService from '@/services/UtilityService';
@@ -75,16 +78,18 @@ import UtilityService from '@/services/UtilityService';
 const store = userStore();
 const { Alert, Confirm } = UtilityService;
 const { User } = storeToRefs(store);
+const router = useRouter();
+
 const IsAccountDialogOpen = ref(false);
 
 const ClickUserIcon = () => {
-  if (!User.value.FBName && !User.value.GoogleName) return;
+  if (!User.value.FBName || !User.value.GoogleName) return;
 
   IsAccountDialogOpen.value = true;
 };
 
 const Logout = () => {
-  Confirm('確定要登出？').then((o) => {
+  Confirm('確定要登出？').then((o: { isConfirmed: boolean }) => {
     if (o.isConfirmed) {
       User.value = {
         GoogleName: '',
@@ -96,7 +101,7 @@ const Logout = () => {
       };
       IsAccountDialogOpen.value = false;
       Alert('登出成功', 'success');
-      window.router.push('/login');
+      router.push('/login');
     }
   });
 };

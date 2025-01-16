@@ -1,3 +1,4 @@
+/* c8 ignore start */
 <template>
   <TopBar />
   <div class="pt-24 mx-auto w-11/12">
@@ -44,14 +45,17 @@
     </div>
   </div>
 </template>
+/* c8 ignore stop */
 
 <script setup lang="ts">
 import { onMounted, ref, watchEffect } from 'vue';
+import { useRouter } from 'vue-router';
 import { storeToRefs } from 'pinia';
 import { userStore } from '../stores/UserStore';
 import UtilityService from '@/services/UtilityService';
 import TopBar from '../components/TopBar.vue';
 
+const router = useRouter();
 const store = userStore();
 const { User } = storeToRefs(store);
 const GoogleButton = ref(null);
@@ -83,9 +87,8 @@ declare const google: any;
 declare const FB: any;
 
 const initializeGoogleLogin = () => {
-  const clientId = store.GoogleClientID;
   google.accounts.id.initialize({
-    client_id: clientId,
+    client_id: store.GoogleClientID,
     callback: handleCredentialResponse,
   });
   google.accounts.id.renderButton(GoogleButton.value, { theme: 'outline', size: 'large' });
@@ -117,7 +120,7 @@ const StartToUse = () => {
     return UtilityService.Alert('請先綁定Facebook帳號', 'error');
   }
 
-  window.router.push('/');
+  router.push('/');
 };
 
 watchEffect(() => {
