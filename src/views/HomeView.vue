@@ -25,7 +25,8 @@
               </div>
             </div>
           </LTooltip>
-          <LIcon class-name="rounded-full border-2 border-yellow-600" :icon-url="User.FBPicture" :icon-size="[50, 50]" :icon-anchor="[20, 40]" />
+          <LIcon v-if="User.FBPicture" class-name="rounded-full border-2 border-yellow-600" :icon-url="User.FBPicture" :icon-size="[50, 50]" :icon-anchor="[20, 40]" />
+          <LIcon v-else class-name="rounded-full border-2 border-yellow-600" icon-url="facebook_icon.svg" :icon-size="[40, 40]" :icon-anchor="[20, 40]" />
         </LMarker>
 
         <LMarker v-if="FocusStop.Name" :lat-lng="[FocusStop.Latitude, FocusStop.Longitude]" @click="ClickStop(FocusStop)">

@@ -24,6 +24,7 @@
         <div class="mb-4">
           <div class="text-xl font-semibold mb-1">
             2. 綁定Facebook
+            <i v-tooltip="'因FB登入開發者需商業認證，若無法登入請同意略過登入'" class="pi pi-question-circle !text-xl mr-1" />
             <span v-if="User.FBName" class="text-green-600"><i class="pi pi-check-circle"></i></span>
           </div>
           <div v-if="!User.FBName" class="flex justify-center w-full">
@@ -55,6 +56,7 @@ import { userStore } from '../stores/UserStore';
 import UtilityService from '@/services/UtilityService';
 import TopBar from '../components/TopBar.vue';
 
+const { Alert, Confirm } = UtilityService;
 const router = useRouter();
 const store = userStore();
 const { User } = storeToRefs(store);
@@ -105,6 +107,19 @@ const LoginFacebook = () => {
           User.value.FBEmail = userInfo.email;
           User.value.FBPicture = userInfo.picture.data.url;
         });
+      } else {
+        Confirm('FB無法登入，是否跳過FB登入？').then((o: { isConfirmed: boolean }) => {
+          if (o.isConfirmed) {
+            if (!User.value.GoogleName) {
+              Alert('請先登入Google', 'error');
+              return;
+            }
+            User.value.FBName = User.value.GoogleName;
+            User.value.FBEmail = User.value.GoogleEmail;
+
+            Alert('已經跳過FB登入', 'info');
+          }
+        });
       }
     },
     { scope: 'public_profile,email' },
@@ -113,11 +128,11 @@ const LoginFacebook = () => {
 
 const StartToUse = () => {
   if (!User.value.GoogleName) {
-    return UtilityService.Alert('請先登入Google帳號', 'error');
+    return Alert('請先登入Google帳號', 'error');
   }
 
   if (!User.value.FBName) {
-    return UtilityService.Alert('請先綁定Facebook帳號', 'error');
+    return Alert('請先綁定Facebook帳號', 'error');
   }
 
   router.push('/');

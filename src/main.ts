@@ -50,7 +50,7 @@ app.use(router);
 app.use(PrimeVue, {
   theme: {
     preset: MyPreset,
-    options: {},
+    options: { darkModeSelector: '' }, // 關閉深色模式
   },
 });
 

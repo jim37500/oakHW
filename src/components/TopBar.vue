@@ -14,6 +14,9 @@
             <div v-if="User.FBPicture">
               <img class="size-12 rounded-full" :src="User.FBPicture" alt="Your Profile" />
             </div>
+            <div v-else-if="User.GooglePicture">
+              <img class="size-12 rounded-full" :src="User.GooglePicture" alt="Your Profile" />
+            </div>
             <div v-else class="flex items-center justify-center rounded-full border-white border-2 w-10 h-10">
               <FontAwesomeIcon icon="fa-regular fa-user" class="text-white cursor-pointer text-xl" />
             </div>
@@ -50,7 +53,7 @@
     </div>
     <div v-if="User.FBName" class="flex items-center">
       <div class="w-4/12 flex justify-center">
-        <img class="w-12 rounded-full border-2 border-gray-300" :src="User.FBPicture" />
+        <img class="w-12 rounded-full border-2 border-gray-300" :src="User.FBPicture ? User.FBPicture : 'facebook_icon.svg'" />
       </div>
       <div class="w-8/12 pl-4">
         <div class="font-semibold text-lg text-blue-500 mb-1">{{ User.FBName }}</div>
@@ -100,7 +103,7 @@ const Logout = () => {
         FBPicture: '',
       };
       IsAccountDialogOpen.value = false;
-      Alert('登出成功', 'success');
+      Alert('登出成功', 'info');
       router.push('/login');
     }
   });
